@@ -50,14 +50,14 @@ form {
   top: 50%;
   left: 50%;
   -webkit-transform: translateY(-50%) translateX(-50%);
-  transform: translateY(-50%) translateX(-50%);
+          transform: translateY(-50%) translateX(-50%);
 }
 
 .hcentered {
   position: absolute;
   left: 50%;
   -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
+          transform: translateX(-50%);
 }
 
 .badge-overlay {
@@ -97,4 +97,31 @@ form {
 
 .signature {
   font-size: 0.7em;
+  color: rgb(255, 255, 255);
+  background: rgba(155, 157, 97, 0.71);
+  padding: 1em;
+  border: rgb(226, 225, 223) 1px solid;
+  white-space: pre;
+}
+
+[data-bgtext] {
+  position: relative;
+}
+
+[data-bgtext]:after {
+  content: attr(data-bgtext);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  color: rgba(0, 0, 0, 0.12);
+  font-size: 4em;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateY(-50%) translateX(-50%);
+}
+
+.validationIcon {
+  position: absolute; 
+  top: 1em; 
+  right: 0;
 }

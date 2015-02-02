@@ -7,18 +7,13 @@ var service = {
   sign: sign,
   encrypt: encrypt,
   forget: forget,
+  validateMnemonic: validateMnemonic,
   // requests: requests,
   // request: makeRequest,
   counts: {}
 }
 
-module.exports = function() {
-  return service;
-};
-
 function deriveKeys(mnemonic) {
-  if (!bip39.validateMnemonic(mnemonic)) throw new Error('Invalid mnemonic');
-
   if (!cache[mnemonic]) {
     var seed = bip39.mnemonicToSeed(mnemonic);
     var root = bitcoin.HDNode.fromSeedBuffer(seed);
@@ -31,6 +26,10 @@ function deriveKeys(mnemonic) {
   }
 
   return cache[mnemonic];
+}
+
+function validateMnemonic(mnemonic) {
+  return bip39.validateMnemonic(mnemonic);
 }
 
 function sign(doc, mnemonic) {
@@ -53,3 +52,7 @@ function decrypt(doc, mnemonic) {
 function encrypt(doc, mnemonic) {
   throw new Error('unimplemented');
 }
+
+module.exports = function() {
+  return service;
+};

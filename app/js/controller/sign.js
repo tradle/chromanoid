@@ -1,4 +1,4 @@
-module.exports = function($scope, $location, reqs, crypto) {
+module.exports = function($scope, $location, $timeout, requestQueue, crypto) {
   $scope.send = function() {
     var model = $scope.req;
     $scope.req.submit({
@@ -11,17 +11,7 @@ module.exports = function($scope, $location, reqs, crypto) {
 
   $scope.sign = function() {
     var model = $scope.req;
-    if (!model.mnemonic) {
-      model.error = 'Please enter a passphrase';
-      $timeout(clearError, 5000);
-    }
-    else {
-      try {
-        model.sig = crypto.sign(model.doc, model.mnemonic);
-      } catch (err) {
-        $scope.error = err.message;
-      }
-    }
+    model.sig = crypto.sign(model.doc, model.mnemonic);
   }
 
   $scope.cancel = function() {
@@ -34,12 +24,17 @@ module.exports = function($scope, $location, reqs, crypto) {
     // reqs.enqueue();
   }
 
+  $scope.validateMnemonic = function() {
+    var model = $scope.req;
+    $scope.mnemonicValid = model.mnemonic && crypto.validateMnemonic(model.mnemonic);
+  }
+
   function clearError() {
     $scope.error = null;
   }
 
   function next() {
-    var nextReq = reqs.dequeue('sign');
+    var nextReq = requestQueue.dequeue('sign');
     if (!nextReq) return false;
 
     var model = nextReq;

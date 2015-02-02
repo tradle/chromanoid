@@ -1,14 +1,16 @@
 'use strict';
 
+var manifest = chrome.runtime.getManifest();
 var blacklistedIds = [];
 var noop = function() {};
 var ui;
 var currentReq;
 var queued = [];
+var uiClosed;
 var canceledResp = {
   error: {
     code: -1,
-    message: 'User refused to sign document'
+    message: 'User closed window'
   }
 }
 
@@ -26,22 +28,15 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, respond) 
 
     return; // don't allow this extension access
   } 
-  else if (!request.type) {
-    respond({
-      error: {
-        code: 400,
-        message: 'Property "type" is required'
-      }
-    });
-  }
+  else if (request.forApp !== manifest.name) return; // not for us
 
   var args = arguments;
 
   showUI(function() {
-    var callback = function callback(resp) {
+    var callback = function(resp) {
       respond(resp);
       queued.splice(queued.indexOf(callback), 1);
-      if (!queued.length) ui.close();
+      if (!uiClosed && !queued.length) ui.close();
     };
 
     queued.push(callback);
@@ -70,8 +65,12 @@ function showUI(cb) {
       top: Math.round((screen.availHeight - height) / 2)
     }
   }, function(child) {
+    if (!child) return;
+
+    uiClosed = false;
     ui = child;
     ui.onClosed.addListener(function() {
+      uiClosed = true;
       while (queued.length) {
         queued[0](canceledResp)
       }

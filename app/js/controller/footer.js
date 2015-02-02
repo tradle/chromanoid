@@ -1,4 +1,4 @@
-module.exports = function($scope, $element, $location, reqs) {
+module.exports = function($scope, $element, $location, requestQueue) {
   var menu = $scope.menu = [
     {
       icon: 'home',
@@ -22,11 +22,11 @@ module.exports = function($scope, $element, $location, reqs) {
     }
   ];
 
-  reqs.listen(updateCounts.bind(null, true));
+  requestQueue.listen(updateCounts.bind(null, true));
 
   $scope.check = function($event) {
     if (this.item.path === 'home') {
-      reqs.cancelCurrentRequest();
+      requestQueue.cancelCurrentRequest();
       $location.path('/home');
       return;
     }
@@ -36,7 +36,7 @@ module.exports = function($scope, $element, $location, reqs) {
 
   function updateCounts(apply) {
     menu.forEach(function(item) {
-      item.count = reqs.counts[item.path];
+      item.count = requestQueue.counts[item.path];
     })
 
     if (apply) $scope.$apply();

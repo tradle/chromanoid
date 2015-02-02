@@ -1,7 +1,7 @@
 {
     "name": "paranoid",
     "description": "lets other apps securely sign messages without being exposed to the user's private keys",
-    "version": "0.0.221",
+    "version": "0.0.248",
     "manifest_version": 2,
     "default_locale": "en",
     "permissions": [],
