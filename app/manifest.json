@@ -1,0 +1,21 @@
+{
+    "name": "paranoid",
+    "description": "lets other apps securely sign messages without being exposed to the user's private keys",
+    "version": "0.0.221",
+    "manifest_version": 2,
+    "default_locale": "en",
+    "permissions": [],
+    "icons": {
+        "16": "images/icon-16.png",
+        "128": "images/icon-128.png"
+    },
+    "app": {
+        "background": {
+            "scripts": [
+                "background.js",
+                "scripts/chromereload.js"
+            ],
+            "persistent": false
+        }
+    }
+}

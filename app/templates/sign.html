@@ -1,0 +1,22 @@
+<form ng-controller="SignCtrl">
+  <h3 class="header">{{title}}</h3>
+  <div class="form-group">
+    <div class="document">{{req.doc}}</div>
+  </div>
+  <div class="form-group wordwrap" ng-show="!!req.sig">
+    <h4>Signature</h4>
+    <div class="signature">{{req.sig}}</div>
+  </div>
+  <div class="form-group" ng-show="!req.sig">
+    <textarea class="form-control" placeholder="to sign, please enter the mnemonic from which your keys are derived" ng-model="req.mnemonic"></textarea>
+  </div>
+  <div class="form-group">
+    <button class="btn btn-primary btn-block" ng-show="req.sig == null" ng-click="sign()">Sign</button>
+    <button type="submit" class="btn btn-success btn-block" ng-show="req.sig != null" ng-click="send()">Send</button>
+    <button type="cancel" class="btn btn-default btn-block" ng-click="cancel()">Cancel</button>
+  </div>
+  <div class="error" ng-show="error">
+    {{error}}
+  </div>
+</form>
+<div ng-include src="'templates/footer.html'" class="footer hcentered"></div>

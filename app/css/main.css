@@ -1,0 +1,100 @@
+body {
+  padding: 20px;
+}
+
+button {
+  display: inline-block;
+}
+
+textarea {
+  display: block;
+  margin: 5px;
+}
+
+form {
+  margin-top: 2em;
+}
+
+#actionbar {
+  width: 100%;
+}
+
+/*
+#actionbar .glyphicon-home {
+}
+*/
+
+#actionbar .glyphicon-edit {
+  color: rgb(138, 211, 108);
+}
+
+#actionbar .glyphicon-lock {
+  color: rgb(189, 189, 189);
+}
+
+#actionbar .glyphicon-trash {
+  color: rgb(255, 142, 142);
+}
+
+#actionbar a {
+  font-size: 6rem;
+  padding: 2rem;
+}
+
+#actionbar > ul {
+  text-align: center;
+}
+
+.vhcentered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateY(-50%) translateX(-50%);
+  transform: translateY(-50%) translateX(-50%);
+}
+
+.hcentered {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.badge-overlay {
+  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.footer {
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
+}
+
+.wordwrap {
+  word-wrap: break-word;
+}
+
+.document {
+  color: rgb(182, 120, 120);
+  background: rgb(242, 242, 242);
+  padding: 1em;
+  border: rgb(226, 225, 223) 1px solid;
+  white-space: pre;
+}
+
+.form-group {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.header {
+  text-align: center;
+  padding-bottom: 1em;
+}
+
+.signature {
+  font-size: 0.7em;
+}
