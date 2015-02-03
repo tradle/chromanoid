@@ -1,8 +1,8 @@
-<div id="actionbar" ng-controller="FooterCtrl">
+<div id="actionbar" ng-controller="MenuCtrl">
   <ul class="list-inline">
     <li ng-repeat="item in menu">
       <a class="glyphicon glyphicon-{{item.icon}}" href="#/{{item.path}}" ng-click="check($event)" data-toggle="tooltip" data-placement="top" data-original-title="{{item.tooltip}}">
-        <span class="badge badge-info badge-overlay" ng-show="item.count">{{item.count}}</span>
+        <span class="badge badge-overlay" ng-show="item.count" style="background:rgb(173, 180, 253);">{{item.count}}</span>
       </a>
     </li>
   </ul>

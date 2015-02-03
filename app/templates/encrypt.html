@@ -1,24 +1,26 @@
-<form ng-controller="EncryptCtrl">
-  <h3 id="actionText">{{title}}</h3>
-  <div class="form-group">
-    <h4>Document</h4>
-    <div class="document">{{req.doc}}</div>
-  </div>
-  <div class="form-group" id="sigGroup" ng-show="!!req.ciphertext">
-    <h4>Ciphertext</h4>
-    <div>{{req.ciphertext}}</div>
-  </div>
-  <div class="form-group wordwrap" ng-show="!req.ciphertext">
-    <label for="mnemonic">Mnemonic</label>
-    <textarea class="form-control" id="mnemonic" ng-model="req.mnemonic"></textarea>
-  </div>
-  <div class="form-group">
-    <button class="btn btn-primary btn-block" ng-show="req.sig == null" ng-click="encrypt()">Encrypt</button>
-    <button type="submit" class="btn btn-success btn-block" ng-show="req.sig != null" ng-click="send()">Send</button>
-    <button type="cancel" class="btn btn-danger btn-block" ng-click="cancel()">Cancel</button>
-  </div>
-  <div class="error" ng-show="error">
-    {{error}}
-  </div>
-</form>
-<div ng-include src="'templates/footer.html'"></div>
+<div ng-controller="EncryptCtrl">
+  <div ng-include src="'templates/menu.html'"></div>
+  <form>
+    <h3 id="actionText">{{title}}</h3>
+    <div class="form-group">
+      <h4>Document</h4>
+      <div class="document">{{req.doc}}</div>
+    </div>
+    <div class="form-group" id="sigGroup" ng-show="!!req.ciphertext">
+      <h4>Ciphertext</h4>
+      <div>{{req.ciphertext}}</div>
+    </div>
+    <div class="form-group wordwrap" ng-show="!req.ciphertext">
+      <label for="mnemonic">Mnemonic</label>
+      <textarea class="form-control" id="mnemonic" ng-model="req.mnemonic"></textarea>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-primary btn-block" ng-show="req.sig == null" ng-click="encrypt()">Encrypt</button>
+      <button type="submit" class="btn btn-success btn-block" ng-show="req.sig != null" ng-click="send()">Send</button>
+      <button type="cancel" class="btn btn-danger btn-block" ng-click="cancel()">Cancel</button>
+    </div>
+    <div class="error" ng-show="error">
+      {{error}}
+    </div>
+  </form>
+</div>

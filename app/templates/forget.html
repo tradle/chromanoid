@@ -1,2 +1,12 @@
-Forget
-<div ng-include src="'templates/footer.html'"></div>
+<div ng-controller="ForgetCtrl">
+  <div ng-include src="'templates/menu.html'" class="header"></div>
+  <div class="vhcentered" style="width: 50%; text-align: center;">
+    <button ng-show="!progress" class="btn btn-danger" ng-click="forget()">Forget Everything</button>
+    <div class="progress" ng-show="!!progress">
+      <div class="progress-bar {{forgotten && 'progress-bar-success'}}" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{width:progress + '%'}">
+        <span class="sr-only">{{progress}}% Complete</span>
+      </div>
+    </div>  
+    <!--span ng-show="forgotten" class="glyphicon glyphicon-ok" style="color:green;font-size:2em;"></span-->
+  </div>
+</div>

@@ -1,22 +1,37 @@
-<form ng-controller="SignCtrl">
-  <h3 class="header">{{title}}</h3>
-  <div class="form-group">
-    <div class="document">{{req.doc}}</div>
+<div ng-controller="SignCtrl">
+  <div ng-include src="'templates/menu.html'" class="header"></div>
+  <div class="page-overlay" ng-show="signing == true" style="background: black; opacity: 0.8; color: rgb(113, 161, 89); font-size: 8em;">
+    <span class="vhcentered">SIGNING</span>
   </div>
-  <div class="form-group wordwrap" ng-show="req.sig">
-    <div class="signature" data-bgtext="SIGNATURE">{{req.sig}}</div>
-  </div>
-  <div class="form-group" ng-show="!req.sig" style="position:relative;"> <!-- position:relative to let validationIcon show well -->
-    <textarea class="form-control" ng-change="validateMnemonic()" placeholder="to sign, please enter the mnemonic from which your keys are derived" ng-model="req.mnemonic"></textarea>
-    <span ng-show="req.mnemonic.length" class="validationIcon glyphicon glyphicon-{{mnemonicValid ? 'ok' : 'remove'}}" style="color: {{mnemonicValid ? 'green' : 'red' }}"></span>
-  </div>
-  <div class="form-group">
-    <button class="btn btn-primary btn-block" ng-show="!req.sig" ng-click="sign()" ng-disabled="!mnemonicValid">Sign</button>
-    <button type="submit" class="btn btn-success btn-block" ng-show="req.sig" ng-click="send()">Send</button>
-    <button type="cancel" class="btn btn-default btn-block" ng-click="cancel()">Cancel</button>
-  </div>
-  <!--div class="error" ng-show="error">
-    {{error}}
-  </div-->
-</form>
-<div ng-include src="'templates/footer.html'" class="footer hcentered"></div>
+  <form>
+    <h3 class="header">{{title}}</h3>
+    <div class="form-group">
+      <div class="document">{{req.doc}}</div>
+    </div>
+    <div class="form-group wordwrap" ng-show="req.sig">
+      <div class="signature" data-bgtext="SIGNATURE">{{req.sig}}</div>
+    </div>
+    <div class="form-group" ng-show="!req.sig" style="position:relative;"> <!-- position:relative to let validationIcon show well -->
+      <textarea class="form-control" ng-change="validateMnemonic()" placeholder="the mnemonic from which your keys are derived" ng-model="req.mnemonic" style="margin: 0;"></textarea>
+    </div>
+    <div class="btn-group btn-group-justified" role="group" ng-show="!req.sig">
+      <div class="btn-group" role="group">
+        <button class="btn btn-primary" ng-show="!req.sig" ng-click="sign()" ng-disabled="!mnemonicValid">Sign</button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="cancel" class="btn btn-default" ng-click="cancel()">Cancel</button>
+      </div>
+    </div>
+    <div class="btn-group btn-group-justified" role="group" ng-show="req.sig">
+      <div class="btn-group" role="group">
+        <button type="submit" class="btn btn-success" ng-show="req.sig" ng-click="send()">Send</button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="cancel" class="btn btn-default" ng-click="cancel()">Cancel</button>
+      </div>
+    </div>
+    <div class="error" ng-show="error" style="margin-top: 1em;">
+      <div class="alert alert-danger" role="alert">{{error}}</div>
+    </div>
+  </form>
+</div>

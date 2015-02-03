@@ -53,22 +53,41 @@ function showUI(cb) {
     return;
   }
 
-  var width = screen.availWidth / 2 | 0;
-  var height = screen.availHeight / 2 | 0;
+  var width;
+  var height;
+  var left;
+  var top;
+  var minDim = Math.min(screen.availWidth, screen.availHeight);
+  if (minDim > 600) {
+    width = 600;
+    height = 600;
+    left = Math.round((screen.availWidth - width) / 2);
+    top = Math.round((screen.availHeight - height) / 2);
+  }
+  else {
+    width = screen.availWidth;
+    height = screen.availHeight;
+    left = 0;
+    top = 0;
+  }
 
+  var windowId = 'main';
   chrome.app.window.create('index.html', {
-    id: 'main',
-    bounds: {
+    id: windowId,
+    outerBounds: {
       width: width,
       height: height,
-      left: Math.round((screen.availWidth - width) / 2),
-      top: Math.round((screen.availHeight - height) / 2)
+      left: left,
+      top: top
     }
   }, function(child) {
     if (!child) return;
 
     uiClosed = false;
     ui = child;
+    ui.resizeTo(width, height);
+    ui.moveTo(left, top);
+
     ui.onClosed.addListener(function() {
       uiClosed = true;
       while (queued.length) {

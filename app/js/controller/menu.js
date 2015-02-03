@@ -1,4 +1,4 @@
-module.exports = function($scope, $element, $location, requestQueue) {
+module.exports = function($scope, $element, $location, requests) {
   var menu = $scope.menu = [
     {
       icon: 'home',
@@ -22,13 +22,15 @@ module.exports = function($scope, $element, $location, requestQueue) {
     }
   ];
 
-  requestQueue.listen(updateCounts.bind(null, true));
+  requests.listen(updateCounts.bind(null, true));
 
   $scope.check = function($event) {
-    if (this.item.path === 'home') {
-      requestQueue.cancelCurrentRequest();
-      $location.path('/home');
-      return;
+    switch (this.item.path) {
+      case 'home':
+      /* fall through */
+      case 'forget':
+        $location.path('/' + this.item.path);
+        return;
     }
 
     if (!this.item.count) $event.preventDefault();
@@ -36,13 +38,15 @@ module.exports = function($scope, $element, $location, requestQueue) {
 
   function updateCounts(apply) {
     menu.forEach(function(item) {
-      item.count = requestQueue.counts[item.path];
+      item.count = requests.counts[item.path];
     })
 
     if (apply) $scope.$apply();
   }
 
   updateCounts();
+
+  // TODO: get rid of this, and use ui-bootstrap + ui.bootstrap.tooltip
   $scope.$watch(function() {
     $element.find('[data-toggle="tooltip"]').tooltip();
   })

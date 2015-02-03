@@ -1,4 +1,4 @@
-module.exports = function($scope, $location, $timeout, requestQueue, crypto) {
+module.exports = function($scope, $location, $timeout, requests, crypto) {
   $scope.send = function() {
     var model = $scope.req;
     $scope.req.submit({
@@ -11,7 +11,21 @@ module.exports = function($scope, $location, $timeout, requestQueue, crypto) {
 
   $scope.sign = function() {
     var model = $scope.req;
-    model.sig = crypto.sign(model.doc, model.mnemonic);
+
+    $scope.signing = true;
+    $timeout(function() {
+      var doc = model.doc;
+      try {
+        // remove JSON formatting whitespace before signing
+        doc = JSON.parse(doc);
+        doc = JSON.stringify(doc);
+      } catch (err) {
+        // guess it wasn't JSON
+      }
+
+      model.sig = crypto.sign(doc, model.mnemonic);
+      $scope.signing = false;
+    }, 50);
   }
 
   $scope.cancel = function() {
@@ -27,6 +41,7 @@ module.exports = function($scope, $location, $timeout, requestQueue, crypto) {
   $scope.validateMnemonic = function() {
     var model = $scope.req;
     $scope.mnemonicValid = model.mnemonic && crypto.validateMnemonic(model.mnemonic);
+    $scope.error = !model.mnemonic || $scope.mnemonicValid ? null :'Please enter a valid mnemonic';
   }
 
   function clearError() {
@@ -34,10 +49,8 @@ module.exports = function($scope, $location, $timeout, requestQueue, crypto) {
   }
 
   function next() {
-    var nextReq = requestQueue.dequeue('sign');
-    if (!nextReq) return false;
-
-    var model = nextReq;
+    $scope.req = requests.next('sign');
+    var model = $scope.req;
     if (typeof model.doc === 'object') model.doc = JSON.stringify(model.doc, null, 2);
 
     $scope.req = model;
@@ -46,7 +59,10 @@ module.exports = function($scope, $location, $timeout, requestQueue, crypto) {
 
   function nextOrHome() {
     $scope.req = null;
-    if (next() === false) $location.path('/home');
+    if (next() === false) {
+
+      $location.path('/home');
+    }
   }
 
   next();

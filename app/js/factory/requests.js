@@ -2,11 +2,13 @@
 module.exports = function reqHandler() {
   return {
     enqueue: enqueue,
-    dequeue: dequeue,
+    // dequeue: dequeue,
+    // peek: peek,
+    next: peek,
     counts: counts,
-    cancelCurrentRequest: function() {
-      if (currentReq) currentReq.cancel();
-    },
+    // cancelCurrentRequest: function() {
+    //   if (currentReq) currentReq.cancel();
+    // },
     listen: function(cb) {
       onchange.push(cb);
     },
@@ -17,7 +19,7 @@ module.exports = function reqHandler() {
   }
 };
 
-var currentReq;
+// var currentReq;
 var onchange = [];
 var counts = {};
 var requests = {
@@ -34,12 +36,22 @@ function count(type) {
   });
 }
 
-function dequeue(type) {
-  var req = requests[type].shift();
-  currentReq = req;
+function remove(type, req) {
+  var idx = requests[type].indexOf(req);
+  if (idx !== -1) requests[type].splice(idx, 1);
   count(type);
-  return req;
 }
+
+function peek(type) {
+  return requests[type][0];
+}
+
+// function dequeue(type) {
+//   var req = requests[type].shift();
+//   currentReq = req;
+//   count(type);
+//   return req;
+// }
 
 function enqueue(request, cb) {
   if (!request.type) {
@@ -66,14 +78,15 @@ function enqueue(request, cb) {
       throw new Error('unsupported request type');
   }
 
-  requests[request.type].push({
+  var req = {
     doc: request.data.doc,
     submit: function(resp) {
       cb(resp);
-      currentReq = null;
+      // currentReq = null;
+      remove(request.type, req);
     },
     cancel: function(resp) {
-      currentReq = null;
+      // currentReq = null;
       resp = resp || {
         error: {
           code: -1,
@@ -82,8 +95,10 @@ function enqueue(request, cb) {
       }
 
       cb(resp);
+      remove(request.type, req);
     }
-  });
+  };
 
+  requests[request.type].push(req);
   count(request.type);
 }

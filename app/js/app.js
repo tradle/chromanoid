@@ -39,4 +39,4 @@ app.config(function($routeProvider) {
 ]);
 // next()
 
-global.handleRequest = require('./factory/requestQueue')().enqueue; // TODO: fix this
+global.handleRequest = require('./factory/requests')().enqueue; // TODO: fix this

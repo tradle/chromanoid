@@ -6,7 +6,7 @@ var cache = {};
 var service = {
   sign: sign,
   encrypt: encrypt,
-  forget: forget,
+  clearCache: clearCache,
   validateMnemonic: validateMnemonic,
   // requests: requests,
   // request: makeRequest,
@@ -39,7 +39,7 @@ function sign(doc, mnemonic) {
   // state.set('signed');
 }
 
-function forget() {
+function clearCache() {
   cache = {};
 }
 
