@@ -1,10 +1,10 @@
 html {
-  overflow: visible;
+  overflow: scroll;
 }
 
 body {
   padding: 20px;
-  overflow: visible;
+  overflow: scroll;
 }
 
 [ng-view] {
@@ -24,28 +24,32 @@ form {
   margin-top: 2em;
 }
 
-#actionbar {
+.actionbar {
   width: 100%;
 }
 
 /*
-#actionbar .glyphicon-home {
+.actionbar .glyphicon-home {
 }
 */
 
-#actionbar .glyphicon-edit {
+.actionbar .glyphicon-edit {
   color: rgb(138, 211, 108);
 }
 
-#actionbar .glyphicon-lock {
+.actionbar .glyphicon-lock {
   color: rgb(189, 189, 189);
 }
 
-#actionbar .glyphicon-trash {
+.actionbar .glyphicon-trash {
   color: rgb(255, 142, 142);
 }
 
-#actionbar .glyphicon {
+.actionbar .glyphicon-user {
+  color: #80C4FF;
+}
+
+.actionbar .glyphicon {
   font-size: 6rem;
   padding: 2rem;
 }
@@ -55,7 +59,7 @@ form {
   padding: 1rem;
 }
 
-#actionbar > ul {
+.actionbar > ul {
   text-align: center;
 }
 

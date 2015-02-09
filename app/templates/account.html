@@ -1,0 +1,35 @@
+<div ng-controller="AccountCtrl">
+  <div ng-include src="'templates/menu.html'" class="header"></div>
+  <div class="col-lg">
+    <div class="input-group input-group-lg" style="width:100%; margin-bottom:1rem;">
+      <input type="text" class="form-control" name="alias" ng-model="alias" placeholder="Account Alias" />
+    </div>
+    <div ng-show="!account.hasKeys">
+      <div class="form-group">
+        <textarea class="form-control" rows="3" name="mnemonic" ng-model="mnemonic" placeholder="mnemonic code for this account" style="margin:0;" ng-change="validateMnemonic()" />
+      </div>
+      <div class="btn-group btn-group-justified" role="group">
+        <button class="btn btn-primary" type="button" ng-click="generateMnemonic()" style="width:100%;margin-bottom:1rem;">
+          Generate new mnemonic
+        </button>
+      </div>
+    </div>
+  </div>
+  <div ng-show="warning">
+    <div class="alert alert-warning" role="alert">{{warning}}</div>
+  </div>
+  <div ng-show="error">
+    <div class="alert alert-danger" role="alert">{{error}}</div>
+  </div>
+  <div class="btn-group btn-group-justified" role="group">
+    <div class="btn-group" role="group">
+      <button type="submit" class="btn btn-success" ng-click="save()" ng-disabled="error">Save</button>
+    </div>
+    <div class="btn-group" role="group">
+      <button type="cancel" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+    <div class="btn-group" role="group">
+      <button type="cancel" class="btn btn-danger" ng-click="delete()">Delete</button>
+    </div>
+  </div>
+</div>

@@ -131,12 +131,12 @@ module.exports = function(grunt) {
         },
 
         // Automatically inject Bower components into the HTML file
-        bowerInstall: {
-            app: {
-                src: ['<%= config.app %>/index.html'],
-                ignorePath: '<%= config.app %>/'
-            }
-        },
+        // bowerInstall: {
+        //     app: {
+        //         src: ['<%= config.app %>/index.html'],
+        //         ignorePath: '<%= config.app %>/'
+        //     }
+        // },
 
         // Copies remaining files to places other tasks can use
         copy: {
@@ -216,12 +216,11 @@ module.exports = function(grunt) {
         //         'copy:styles'
         //     ],
         // },
-
-        // Merge event page, update build number, exclude the debug script
+        // // Merge event page, update build number, exclude the debug script
         chromeManifest: {
             dist: {
                 options: {
-                    buildnumber: true,
+                    // buildnumber: true,
                     background: {
                         target: 'js/background.js',
                         exclude: [
@@ -278,8 +277,11 @@ module.exports = function(grunt) {
     grunt.registerTask('browserify', function() {
       var done = this.async();
       // var togo = 2;
-      var bundle = browserify()
+      browserify()
         .add('./app/js/app.js')
+        // .add('./app/js/factory/index.js')
+        // .add('./app/js/controller/index.js')
+        // .add('./app/js/app.js')
         .bundle()
         .pipe(concat(function(buf) {
           grunt.file.write('dist/js/bundle.js', buf.toString());
@@ -309,10 +311,10 @@ module.exports = function(grunt) {
         'chromeManifest:dist',
         // 'useminPrepare',
         // 'concurrent:dist',
-        // 'concat',
+        'concat',
         // 'cssmin',
         // 'uglify',
-        'concat',
+        // 'concat',
         'copy',
         // 'usemin',
         // 'htmlmin',

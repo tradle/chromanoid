@@ -1,0 +1,22 @@
+<div ng-controller="AccountsCtrl">
+  <div ng-include src="'templates/menu.html'" class="header"></div>
+  <div class="col-lg">
+    <div class="input-group input-group-lg" style="margin-bottom:1rem;">
+      <input type="text" class="form-control" ng-model="account.alias" ng-change="validateAlias()" />
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="add()" ng-disabled="!aliasIsNew || !aliasIsValid">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </span>
+    </div>
+  </div>
+  <div class="error" ng-show="error" style="margin-top: 1em;">
+    <div class="alert alert-danger" role="alert">{{error}}</div>
+  </div>
+  <div class="list-group" ng-show="accounts.length">
+    <a class="list-group-item" ng-repeat="account in accounts | filter: account" href="#accounts/{{account.id}}">
+      <span class="badge">{{account.count}}</span>
+      {{account.alias}}
+    </a>
+  </div>
+</div>

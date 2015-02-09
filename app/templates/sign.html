@@ -1,6 +1,6 @@
 <div ng-controller="SignCtrl">
   <div ng-include src="'templates/menu.html'" class="header"></div>
-  <div class="page-overlay" ng-show="signing == true" style="background: black; opacity: 0.8; color: rgb(113, 161, 89); font-size: 8em;">
+  <div class="page-overlay" ng-show="signing == true" style="background: black; opacity: 0.8; color: rgb(113, 161, 89); font-size: 5em;">
     <span class="vhcentered">SIGNING</span>
   </div>
   <form>
@@ -12,7 +12,7 @@
       <div class="signature" data-bgtext="SIGNATURE">{{req.sig}}</div>
     </div>
     <div class="form-group" ng-show="!req.sig" style="position:relative;"> <!-- position:relative to let validationIcon show well -->
-      <textarea class="form-control" ng-change="validateMnemonic()" placeholder="the mnemonic from which your keys are derived" ng-model="req.mnemonic" style="margin: 0;"></textarea>
+      <textarea class="form-control" ng-change="validateMnemonic()" placeholder="Enter the mnemonic for account: {{req.alias}}" ng-model="req.mnemonic" style="margin: 0;"></textarea>
     </div>
     <div class="btn-group btn-group-justified" role="group" ng-show="!req.sig">
       <div class="btn-group" role="group">

@@ -1,4 +1,4 @@
-module.exports = function($scope, $location, $timeout, requests, crypto) {
+module.exports = function($scope, $location, $timeout, requests, AccountService) {
   $scope.send = function() {
     var model = $scope.req;
     $scope.req.submit({
@@ -11,6 +11,7 @@ module.exports = function($scope, $location, $timeout, requests, crypto) {
 
   $scope.sign = function() {
     var model = $scope.req;
+    var account = AccountService.withAlias(model.alias);
 
     $scope.signing = true;
     $timeout(function() {
@@ -23,7 +24,7 @@ module.exports = function($scope, $location, $timeout, requests, crypto) {
         // guess it wasn't JSON
       }
 
-      model.sig = crypto.sign(doc, model.mnemonic);
+      model.sig = account.sign(doc);
       $scope.signing = false;
     }, 50);
   }
@@ -40,8 +41,9 @@ module.exports = function($scope, $location, $timeout, requests, crypto) {
 
   $scope.validateMnemonic = function() {
     var model = $scope.req;
-    $scope.mnemonicValid = model.mnemonic && crypto.validateMnemonic(model.mnemonic);
-    $scope.error = !model.mnemonic || $scope.mnemonicValid ? null :'Please enter a valid mnemonic';
+    var account = AccountService.withAlias(model.alias);
+    $scope.mnemonicValid = model.mnemonic && account.validateMnemonic(model.mnemonic);
+    $scope.error = !model.mnemonic || $scope.mnemonicValid ? null : 'Invalid mnemonic';
   }
 
   function clearError() {
@@ -54,14 +56,14 @@ module.exports = function($scope, $location, $timeout, requests, crypto) {
     if (typeof model.doc === 'object') model.doc = JSON.stringify(model.doc, null, 2);
 
     $scope.req = model;
-    $scope.title = 'Do you wish to sign the following document?';
+    $scope.title = 'Sign as ' + model.alias + '?';
   }
 
   function nextOrHome() {
     $scope.req = null;
     if (next() === false) {
 
-      $location.path('/home');
+      $location.path('/');
     }
   }
 

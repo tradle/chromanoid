@@ -1,35 +1,44 @@
+var menu = [
+  {
+    icon: 'home',
+    path: '/',
+    tooltip: 'Home'
+  },
+  {
+    icon: 'edit',
+    path: '/sign',
+    tooltip: 'Sign a document'
+  },
+  {
+    icon: 'lock',
+    path: '/decrypt',
+    tooltip: 'Encrypt/decrypt'
+  },
+  {
+    icon: 'user',
+    path: '/accounts',
+    tooltip: 'Accounts'
+  },
+  {
+    icon: 'trash',
+    path: '/forget',
+    tooltip: 'Forget cached keys'
+  }
+];
+
 module.exports = function($scope, $element, $location, requests) {
-  var menu = $scope.menu = [
-    {
-      icon: 'home',
-      path: 'home',
-      tooltip: 'Home'
-    },
-    {
-      icon: 'edit',
-      path: 'sign',
-      tooltip: 'Sign a document'
-    },
-    {
-      icon: 'lock',
-      path: 'encrypt',
-      tooltip: 'Encrypt/decrypt'
-    },
-    {
-      icon: 'trash',
-      path: 'forget',
-      tooltip: 'Forget cached keys'
-    }
-  ];
+  $scope.menu = menu;
+  $scope.vertical = $location.path() === '/';
 
   requests.listen(updateCounts.bind(null, true));
 
   $scope.check = function($event) {
     switch (this.item.path) {
-      case 'home':
+      case '/':
       /* fall through */
-      case 'forget':
-        $location.path('/' + this.item.path);
+      case '/accounts':
+      case '/forget':
+        // $location.path(this.item.path);
         return;
     }
 
@@ -38,7 +47,7 @@ module.exports = function($scope, $element, $location, requests) {
 
   function updateCounts(apply) {
     menu.forEach(function(item) {
-      item.count = requests.counts[item.path];
+      item.count = requests.counts[item.path.slice(1)];
     })
 
     if (apply) $scope.$apply();

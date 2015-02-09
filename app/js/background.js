@@ -4,7 +4,6 @@ var manifest = chrome.runtime.getManifest();
 var blacklistedIds = [];
 var noop = function() {};
 var ui;
-var currentReq;
 var queued = [];
 var uiClosed;
 var canceledResp = {
@@ -30,8 +29,6 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, respond) 
   } 
   else if (request.forApp !== manifest.name) return; // not for us
 
-  var args = arguments;
-
   showUI(function() {
     var callback = function(resp) {
       respond(resp);
@@ -40,7 +37,12 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, respond) 
     };
 
     queued.push(callback);
-    ui.contentWindow.handleRequest(request, callback);
+    var requests = ui.contentWindow.angular
+      .element(ui.contentWindow.document)
+      .injector()
+      .get('requests');
+
+    requests.enqueue(request, callback);
   });
 
   return true; // signify that we'll be responding asynchronously

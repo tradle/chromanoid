@@ -1,10 +1,13 @@
 {
     "name": "paranoid",
     "description": "lets other apps securely sign messages without being exposed to the user's private keys",
-    "version": "0.0.323",
+    "version": "0.0.328",
     "manifest_version": 2,
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAymszEAkOWCUwqQQ4etmGCb57Gsjxw1dfo1HZqRWBYsbQ5lud50vV2Dovs36k4s+IWbmJ1LIUdhUfSbQGeP4zXpZ9czqRObflYAoBixKzVKShkgy4MOSTYxTHCWS37QxH/gBKHP6D+BD01inYba8yEOIJytqLyJuLgeFna53BPio7Dji4oL/RAH/v7kO51+fGf9sOsiZU+NQ4GxBQYhr5aT36zxjdyvk1A27wS3O1Fhd1YzBPFoqkiiJIvZRpd+ukX2AG/k5xbj6DvTaXoaDAQ1co+dg7HmKtffqPLD/mNsW3D4OKdazxJyDB7JABzN1uWw6ifYTUw3dK3VxIlEmawQIDAQAB",
     "default_locale": "en",
-    "permissions": [],
+    "permissions": [
+        "storage"
+    ],
     "icons": {
         "16": "images/icon-16.png",
         "128": "images/icon-128.png"

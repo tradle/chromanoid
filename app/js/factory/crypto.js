@@ -6,6 +6,7 @@ var cache = {};
 var service = {
   sign: sign,
   encrypt: encrypt,
+  decrypt: decrypt,
   clearCache: clearCache,
   validateMnemonic: validateMnemonic,
   // requests: requests,

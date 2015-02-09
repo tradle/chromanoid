@@ -1,4 +1,4 @@
-<div ng-controller="EncryptCtrl">
+<div ng-controller="DecryptCtrl">
   <div ng-include src="'templates/menu.html'"></div>
   <form>
     <h3 id="actionText">{{title}}</h3>
@@ -15,7 +15,7 @@
       <textarea class="form-control" id="mnemonic" ng-model="req.mnemonic"></textarea>
     </div>
     <div class="form-group">
-      <button class="btn btn-primary btn-block" ng-show="req.sig == null" ng-click="encrypt()">Encrypt</button>
+      <button class="btn btn-primary btn-block" ng-show="req.sig == null" ng-click="decrypt()">Decrypt</button>
       <button type="submit" class="btn btn-success btn-block" ng-show="req.sig != null" ng-click="send()">Send</button>
       <button type="cancel" class="btn btn-danger btn-block" ng-click="cancel()">Cancel</button>
     </div>

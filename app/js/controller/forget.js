@@ -1,6 +1,6 @@
-module.exports = function($scope, $timeout, $interval, $location, crypto) {
+module.exports = function($scope, $timeout, $interval, $location, AccountService) {
   $scope.forget = function() {
-    crypto.clearCache();
+    AccountService.wipeSensitiveData();
 
     $scope.progress = 0;
     $interval(function() {
