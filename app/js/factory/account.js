@@ -20,8 +20,6 @@ module.exports = function(crypto) {
 
       this.seed = crypto.decrypt(this.seed, password);
     }
-
-    if (this.isNew !== false) this.isNew = true;
   }
 
   Account.prototype.toJSON = function(options) {
@@ -29,8 +27,7 @@ module.exports = function(crypto) {
 
     var data = {
       alias: this.alias,
-      isNew: false,
-      hasKeys: this.hasKeys
+      mnemonicHash: this.mnemonicHash
     };
 
     if (options.saveSeed) {
@@ -49,10 +46,14 @@ module.exports = function(crypto) {
   Account.prototype.setMnemonic = function(mnemonic, overwrite) {
     // if (!overwrite && this.seed) throw new Error('This will overwrite the current seed!');
 
-    this.isNew = false;
     this.mnemonic = mnemonic;
+    this.mnemonicHash = this.hashMnemonic(mnemonic);
     this.keys = null;
-    this.hasKeys = true; // having a mnemonic is equivalent
+  }
+
+  Account.prototype.hashMnemonic =
+  Account.hashMnemonic = function(mnemonic) {
+    return nodeCrypto.createHash('sha256').update(mnemonic).digest('base64');
   }
 
   Account.prototype.generateMnemonic = 
@@ -60,7 +61,14 @@ module.exports = function(crypto) {
     return bip39.generateMnemonic();
   }
 
-  Account.prototype.validateMnemonic = Account.validateMnemonic = bip39.validateMnemonic.bind(bip39);
+  Account.prototype.validateMnemonic = 
+  Account.validateMnemonic = function(mnemonic) {
+    return mnemonic && bip39.validateMnemonic(mnemonic);
+  }
+
+  Account.prototype.verifyMnemonic = function(mnemonic) {
+    return this.mnemonic && this.mnemonicHash === this.hashMnemonic(mnemonic);
+  }
 
   Account.prototype.generateKeys = function() {
     if (!this.mnemonic) this.generateMnemonic();

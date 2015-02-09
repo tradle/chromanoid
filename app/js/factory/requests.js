@@ -1,6 +1,7 @@
 
 // var currentReq;
 var DOC_REQ_TYPES = ['sign', 'verify', 'encrypt', 'decrypt'];
+var REQ_TYPES = ['sign', 'verify', 'encrypt', 'decrypt', 'newaccount'];
 var onchange = [];
 var counts = {};
 var requests = {
@@ -21,7 +22,17 @@ function httpErr(code, msg) {
   }
 }
 
-module.exports = function(AccountService) {
+module.exports = function(AccountService, $q) {
+  function asyncify(fn) {
+    return function() {
+      var args = arguments;
+      var ctx = this;
+      return $q(function(resolve) {
+        resolve(fn.apply(ctx, args));
+      });
+    }
+  }
+
   function count(type) {
     counts[type] = requests[type].length;
     onchange.forEach(function(cb) {
@@ -42,6 +53,10 @@ module.exports = function(AccountService) {
   function validateRequest(request, cb) {
     try {
       requireProp(request, 'type');
+      if (REQ_TYPES.indexOf(request.type) === -1) {
+        throw new Error('Unsupported request type: ' + request.type);
+      }
+
       requireProp(request, 'alias');
       if (DOC_REQ_TYPES.indexOf(request.type) !== -1) {
         requireProp(request, 'data');
@@ -66,24 +81,8 @@ module.exports = function(AccountService) {
   }
 
   function enqueue(request, cb) {
+    cb = asyncify(cb);
     if (!validateRequest(request, cb)) return;
-
-    switch (request.type) {
-      case 'sign':
-      /* fall through */
-      case 'verify':
-      /* fall through */
-      case 'encrypt':
-      /* fall through */
-      case 'decrypt':
-      /* fall through */
-      case 'newaccount':
-      /* fall through */
-      case 'forget':
-        break;
-      default:
-        throw new Error('unsupported request type');
-    }
 
     request = normalizeRequest(request, cb);
     requests[request.type].push(request);
@@ -118,14 +117,9 @@ module.exports = function(AccountService) {
   }
 
   return {
-    enqueue: enqueue,
-    // dequeue: dequeue,
-    // peek: peek,
+    queue: enqueue,
     next: peek,
     counts: counts,
-    // cancelCurrentRequest: function() {
-    //   if (currentReq) currentReq.cancel();
-    // },
     listen: function(cb) {
       onchange.push(cb);
     },

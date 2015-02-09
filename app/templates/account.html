@@ -4,7 +4,7 @@
     <div class="input-group input-group-lg" style="width:100%; margin-bottom:1rem;">
       <input type="text" class="form-control" name="alias" ng-model="alias" placeholder="Account Alias" />
     </div>
-    <div ng-show="!account.hasKeys">
+    <div ng-show="!account.mnemonicHash">
       <div class="form-group">
         <textarea class="form-control" rows="3" name="mnemonic" ng-model="mnemonic" placeholder="mnemonic code for this account" style="margin:0;" ng-change="validateMnemonic()" />
       </div>

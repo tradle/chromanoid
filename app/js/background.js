@@ -42,7 +42,7 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, respond) 
       .injector()
       .get('requests');
 
-    requests.enqueue(request, callback);
+    requests.queue(request, callback);
   });
 
   return true; // signify that we'll be responding asynchronously

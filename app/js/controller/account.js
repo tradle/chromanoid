@@ -28,7 +28,7 @@ module.exports = function($scope, $location, $routeParams, AccountService) {
       'Please enter a valid mnemonic or generate a fresh one by clicking above';
 
     $scope.warning = $scope.mnemonic && 
-      $scope.account.isNew &&
+      !$scope.account.mnemonicHash && // is a new account
       !$scope.error && 
       'Write down this mnemonic in a safe place, as it will be erased the moment you close this program';
   }

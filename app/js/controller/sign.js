@@ -24,6 +24,8 @@ module.exports = function($scope, $location, $timeout, requests, AccountService)
         // guess it wasn't JSON
       }
 
+      if (!account.mnemonic) account.setMnemonic(model.mnemonic);
+
       model.sig = account.sign(doc);
       $scope.signing = false;
     }, 50);
@@ -41,9 +43,16 @@ module.exports = function($scope, $location, $timeout, requests, AccountService)
 
   $scope.validateMnemonic = function() {
     var model = $scope.req;
-    var account = AccountService.withAlias(model.alias);
-    $scope.mnemonicValid = model.mnemonic && account.validateMnemonic(model.mnemonic);
-    $scope.error = !model.mnemonic || $scope.mnemonicValid ? null : 'Invalid mnemonic';
+    var account = $scope.account;
+    $scope.error = null;
+    $scope.mnemonicValid = account.validateMnemonic(model.mnemonic);
+    if ($scope.mnemonicValid) {
+      // if the account doesn't have a mnemonic, accept the mnemonic
+      $scope.mnemonicVerified = !account.mnemonic || account.verifyMnemonic(model.mnemonic);
+    }
+
+    if (!$scope.mnemonicValid) $scope.error = 'Invalid mnemonic';
+    else if (!$scope.mnemonicVerified) $scope.error = 'Input mnemonic differs from account mnemonic';
   }
 
   function clearError() {
@@ -51,12 +60,10 @@ module.exports = function($scope, $location, $timeout, requests, AccountService)
   }
 
   function next() {
-    $scope.req = requests.next('sign');
-    var model = $scope.req;
-    if (typeof model.doc === 'object') model.doc = JSON.stringify(model.doc, null, 2);
+    var model = $scope.req = requests.next('sign');
+    $scope.account = AccountService.withAlias(model.alias);
 
-    $scope.req = model;
-    $scope.title = 'Sign as ' + model.alias + '?';
+    if (typeof model.doc === 'object') model.doc = JSON.stringify(model.doc, null, 2);
   }
 
   function nextOrHome() {
