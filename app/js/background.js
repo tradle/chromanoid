@@ -27,7 +27,7 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, respond) 
 
     return; // don't allow this extension access
   }
-  else if (request.forApp !== manifest.name) return; // not for us
+  else if (!request.forApp || request.forApp.name !== manifest.name) return; // not for us
 
   showUI(function() {
     var callback = function(resp) {

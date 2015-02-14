@@ -68,8 +68,7 @@ module.exports = function(AccountService, $q, $location, $rootScope) {
 
       requireProp(request, 'alias');
       if (DOC_REQ_TYPES.indexOf(request.type) !== -1) {
-        requireProp(request, 'data');
-        requireProp(request.data, 'doc');
+        requireProp(request, 'doc');
         if (!AccountService.withAlias(request.alias)) {
           cb({
             error: httpErr(404, 'No account found with alias: ' + request.alias)
@@ -107,7 +106,6 @@ module.exports = function(AccountService, $q, $location, $rootScope) {
 
   function normalizeRequest(request, cb) {
     var req = angular.copy(request);
-    angular.extend(req, req.data);
     req.submit = function submit(resp) {
       currentReq = null;
       cb(resp);
