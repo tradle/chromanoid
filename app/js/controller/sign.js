@@ -61,6 +61,8 @@ module.exports = function($scope, $location, $timeout, requests, AccountService)
 
   function next() {
     var model = $scope.req = requests.next('sign');
+    if (!model) return false;
+
     $scope.account = AccountService.withAlias(model.alias);
 
     if (typeof model.doc === 'object') model.doc = JSON.stringify(model.doc, null, 2);
