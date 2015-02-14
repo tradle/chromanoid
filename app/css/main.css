@@ -59,6 +59,10 @@ form {
   padding: 1rem;
 }
 
+.header-multiline {
+  line-height: 2;
+}
+
 .actionbar > ul {
   text-align: center;
 }
@@ -173,4 +177,16 @@ form {
   background: black;
   color: rgb(113, 161, 89);
   font-size: 5em;
+}
+
+kbd.app {
+  background-color: #7ECDF4;
+}
+
+kbd.doc {
+  background-color: #FDDE7B;
+}
+
+kbd.alias {
+  background-color: #93D877;
 }
