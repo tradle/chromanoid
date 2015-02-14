@@ -1,5 +1,6 @@
 
-// var currentReq;
+var currentReq;
+var MAX_QUEUE_LENGTH = 1; // 1 = disallow queueing
 var DOC_REQ_TYPES = ['sign', 'verify', 'encrypt', 'decrypt'];
 var REQ_TYPES = ['sign', 'verify', 'encrypt', 'decrypt', 'newaccount'];
 var onchange = [];
@@ -22,7 +23,7 @@ function httpErr(code, msg) {
   }
 }
 
-module.exports = function(AccountService, $q) {
+module.exports = function(AccountService, $q, $location, $rootScope) {
   function asyncify(fn) {
     return function() {
       var args = arguments;
@@ -57,6 +58,14 @@ module.exports = function(AccountService, $q) {
         throw new Error('Unsupported request type: ' + request.type);
       }
 
+      if (((currentReq ? 1 : 0) + requests[request.type].length) >= MAX_QUEUE_LENGTH) {
+        cb({
+          error: httpErr(503, 'Temporarily unavailable')
+        });
+
+        return false;
+      }
+
       requireProp(request, 'alias');
       if (DOC_REQ_TYPES.indexOf(request.type) !== -1) {
         requireProp(request, 'data');
@@ -87,31 +96,36 @@ module.exports = function(AccountService, $q) {
     request = normalizeRequest(request, cb);
     requests[request.type].push(request);
     count(request.type);
+
+    // TODO: decide if queueing will be allowed at all
+    if (!currentReq) {
+      $location.path('/' + request.type);
+      $rootScope.$apply();
+      return;
+    }
   }
 
   function normalizeRequest(request, cb) {
-    var req = {
-      type: request.type,
-      doc: request.data && request.data.doc,
-      alias: request.alias,
-      submit: function(resp) {
-        cb(resp);
-        // currentReq = null;
-        remove(request.type, req);
-      },
-      cancel: function(resp) {
-        // currentReq = null;
-        resp = resp || {
-          error: {
-            code: -1,
-            message: 'User canceled'
-          }
-        }
+    var req = angular.copy(request);
+    angular.extend(req, req.data);
+    req.submit = function submit(resp) {
+      currentReq = null;
+      cb(resp);
+      remove(request.type, req);
+    };
 
-        cb(resp);
-        remove(request.type, req);
+    req.cancel = function cancel(resp) {
+      currentReq = null;
+      resp = resp || {
+        error: {
+          code: -1,
+          message: 'User canceled'
+        }
       }
-    }
+
+      cb(resp);
+      remove(request.type, req);
+    };
 
     return req;
   }

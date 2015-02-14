@@ -1,25 +1,18 @@
 
 require('angular');
 
-module.exports = function(Account, $q) {
-  var accounts;
-  var init = $q.defer();
-
-  // TODO: handle the async initialization of this service
-  chrome.storage.local.get('accounts', function(result) {
-    accounts = (result.accounts || []).map(function(attributes) {
+module.exports = function(Account, $q, APP_CONF) {
+  var accounts = APP_CONF.accounts
+    .map(function(attributes) {
       try {
         return new Account(attributes);
       } catch (err) {
         console.log('Failed to load account: ' + attributes.alias);
       }
-    }).filter(function(a) { return a });
-
-    init.resolve();
-  });
+    })
+    .filter(function(a) { return a });
 
   var service = {
-    ready: init.promise,
     accounts: function() {
       return accounts;
     },
@@ -72,20 +65,6 @@ module.exports = function(Account, $q) {
       service.save();
     }
   }
-
-  // for (var p in service) {
-  //   service[p] = promisify(service, p, init.promise);
-  // }
-
-  // function promisify(context, method, promise) {
-  //   var origFn = context[method];
-  //   return function() {
-  //     var args = arguments;
-  //     return promise.then(function() {
-  //       return origFn.apply(context, args);
-  //     })
-  //   }
-  // }
 
   return service;
 }

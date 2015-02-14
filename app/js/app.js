@@ -14,7 +14,7 @@ require('./controller');
 app.config(function($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'templates/home.html', 
+      templateUrl: 'templates/home.html',
       controller: 'MainCtrl'
     })
     .when('/accounts', {
@@ -41,7 +41,7 @@ app.config(function($routeProvider) {
   })
   .config( [
     '$compileProvider',
-    function( $compileProvider ) {   
+    function( $compileProvider ) {
       $compileProvider.aHrefSanitizationWhitelist(/^\s*(chrome-extension):/);
     }
   ])
@@ -51,5 +51,21 @@ app.config(function($routeProvider) {
       console.error(exception.stack);
     };
   });
+
+(function() {
+  var $q = angular.injector(['ng']).get('$q');
+  var ready = $q.defer();
+  window.appReady = ready.promise;
+  chrome.storage.local.get('accounts', function(result) {
+    app.constant('APP_CONF', {
+      accounts: (result.accounts || [])
+    });
+
+    angular.element(document).ready(function() {
+      angular.bootstrap(document, ['paranoid']);
+      ready.resolve();
+    });
+  });
+})();
 
 global.handleRequest = require('./factory/requests')().enqueue;

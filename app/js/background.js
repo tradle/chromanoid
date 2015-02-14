@@ -26,23 +26,25 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, respond) 
     });
 
     return; // don't allow this extension access
-  } 
+  }
   else if (request.forApp !== manifest.name) return; // not for us
 
   showUI(function() {
     var callback = function(resp) {
       respond(resp);
       queued.splice(queued.indexOf(callback), 1);
-      if (!uiClosed && !queued.length) ui.close();
+      // if (!uiClosed && !queued.length) ui.close();
     };
 
     queued.push(callback);
-    var requests = ui.contentWindow.angular
-      .element(ui.contentWindow.document)
-      .injector()
-      .get('requests');
+    ui.contentWindow.appReady.then(function() {
+      var requests = ui.contentWindow.angular
+        .element(ui.contentWindow.document)
+        .injector()
+        .get('requests');
 
-    requests.queue(request, callback);
+      requests.queue(request, callback);
+    });
   });
 
   return true; // signify that we'll be responding asynchronously
