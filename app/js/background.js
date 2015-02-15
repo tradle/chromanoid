@@ -104,5 +104,3 @@ function showUI(cb) {
     ui.contentWindow.addEventListener('load', cb);
   });
 }
-
-showUI(); // for testing
