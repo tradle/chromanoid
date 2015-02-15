@@ -33,7 +33,7 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, respond) 
     var callback = function(resp) {
       respond(resp);
       queued.splice(queued.indexOf(callback), 1);
-      // if (!uiClosed && !queued.length) ui.close();
+      if (!uiClosed && !queued.length) ui.close();
     };
 
     queued.push(callback);
