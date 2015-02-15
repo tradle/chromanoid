@@ -318,8 +318,9 @@ module.exports = function(grunt) {
         'copy',
         // 'usemin',
         // 'htmlmin',
-        'browserify',
-        'compress'
+        'browserify'
+        // ,
+        // 'compress'
     ]);
 
     grunt.registerTask('default', [
