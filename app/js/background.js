@@ -61,16 +61,18 @@ function showUI(cb) {
   var height;
   var left;
   var top;
-  var minDim = Math.min(screen.availWidth, screen.availHeight);
+  var aWidth = screen.availWidth;
+  var aHeight = screen.availHeight;
+  var minDim = Math.min(aHeight, aHeight);
   if (minDim > 600) {
     width = 600;
     height = 600;
-    left = Math.round((screen.availWidth - width) / 2);
-    top = Math.round((screen.availHeight - height) / 2);
+    left = Math.round((aWidth - width) / 2);
+    top = Math.round((aHeight - height) / 2);
   }
   else {
-    width = screen.availWidth;
-    height = screen.availHeight;
+    width = aWidth;
+    height = aHeight;
     left = 0;
     top = 0;
   }
@@ -104,3 +106,5 @@ function showUI(cb) {
     ui.contentWindow.addEventListener('load', cb);
   });
 }
+
+showUI(); // for testing

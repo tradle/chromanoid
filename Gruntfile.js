@@ -297,7 +297,7 @@ module.exports = function(grunt) {
       //   }));
 
       //   function finish() {
-      //     if (--togo === 0) done();     
+      //     if (--togo === 0) done();
       //   }
     });
 
@@ -323,9 +323,11 @@ module.exports = function(grunt) {
         // 'compress'
     ]);
 
-    grunt.registerTask('default', [
-        'newer:jshint',
-        'test',
-        'build'
-    ]);
+    // grunt.registerTask('default', [
+    //     'newer:jshint',
+    //     'test',
+    //     'build'
+    // ]);
+
+    grunt.registerTask('default', ['build']);
 };
