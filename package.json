@@ -26,6 +26,7 @@
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-jshint": "~0.9.2",
     "grunt-contrib-watch": "~0.6.1",
+    "grunt-crx": "^0.3.4",
     "grunt-jsbeautifier": "^0.2.8",
     "grunt-mocha": "~0.4.10",
     "grunt-newer": "~0.6.0",

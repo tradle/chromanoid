@@ -249,6 +249,13 @@ module.exports = function(grunt) {
                     dest: ''
                 }]
             }
+        },
+        crx: {
+          jane: {
+            src: 'dist',
+            dest: 'build/signy.crx',
+            privateKey: 'signy.pem'
+          }
         }
     });
 
@@ -329,5 +336,5 @@ module.exports = function(grunt) {
     //     'build'
     // ]);
 
-    grunt.registerTask('default', ['build']);
+    grunt.registerTask('default', ['build', 'crx']);
 };
