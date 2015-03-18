@@ -6,49 +6,12 @@ var noop = function() {};
 var ui;
 var queued = [];
 var uiClosed;
-var canceledResp = {
+var CANCELED_RESP = {
   error: {
     code: -1,
     message: 'User closed window'
   }
 }
-
-// Listens for the app launching then creates the window
-// chrome.app.runtime.onLaunched.addListener();
-
-chrome.runtime.onMessageExternal.addListener(function(request, sender, respond) {
-  if (blacklistedIds.indexOf(sender.id) !== -1) {
-    respond({
-      error: {
-        code: 401,
-        message: 'unauthorized'
-      }
-    });
-
-    return; // don't allow this extension access
-  }
-  else if (!request.forApp || request.forApp.name !== manifest.name) return; // not for us
-
-  showUI(function() {
-    var callback = function(resp) {
-      respond(resp);
-      queued.splice(queued.indexOf(callback), 1);
-      if (!uiClosed && !queued.length) ui.close();
-    };
-
-    queued.push(callback);
-    ui.contentWindow.appReady.then(function() {
-      var requests = ui.contentWindow.angular
-        .element(ui.contentWindow.document)
-        .injector()
-        .get('requests');
-
-      requests.queue(request, callback);
-    });
-  });
-
-  return true; // signify that we'll be responding asynchronously
-});
 
 function showUI(cb) {
   cb = cb || noop;
@@ -91,13 +54,13 @@ function showUI(cb) {
 
     uiClosed = false;
     ui = child;
-    ui.resizeTo(width, height);
-    ui.moveTo(left, top);
+    // ui.resizeTo(width, height);
+    // ui.moveTo(left, top);
 
     ui.onClosed.addListener(function() {
       uiClosed = true;
       while (queued.length) {
-        queued[0](canceledResp)
+        queued[0](CANCELED_RESP)
       }
 
       ui = undefined;
@@ -107,4 +70,47 @@ function showUI(cb) {
   });
 }
 
-showUI(); // for testing
+chrome.app.runtime.onLaunched.addListener(showUI);
+
+// Listens for the app launching then creates the window
+// chrome.app.runtime.onLaunched.addListener();
+
+chrome.runtime.onMessageExternal.addListener(function(request, sender, respond) {
+  if (blacklistedIds.indexOf(sender.id) !== -1) {
+    respond({
+      error: {
+        code: 401,
+        message: 'unauthorized'
+      }
+    });
+
+    return; // don't allow this extension access
+  }
+  else if (!request.forApp || request.forApp.name !== manifest.name) return; // not for us
+
+  showUI(function() {
+    var callback = function(resp) {
+      respond(resp);
+      queued.splice(queued.indexOf(callback), 1);
+      if (!uiClosed && !queued.length) ui.close();
+    };
+
+    queued.push(callback);
+    if (ui.contentWindow.appReady) onload();
+    else ui.contentWindow.addEventListener('load', onload);
+
+    function onload() {
+      ui.contentWindow.appReady.then(function() {
+        var requests = ui.contentWindow.angular
+          .element(ui.contentWindow.document)
+          .injector()
+          .get('requests');
+
+        requests.queue(request, callback);
+      });
+    }
+  });
+
+  return true; // signify that we'll be responding asynchronously
+});
+

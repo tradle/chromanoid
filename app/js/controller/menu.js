@@ -7,7 +7,7 @@ var menu = [
   {
     icon: 'edit',
     path: '/sign',
-    tooltip: 'Sign a document'
+    tooltip: 'Sign'
   },
   {
     icon: 'lock',
@@ -22,13 +22,15 @@ var menu = [
   {
     icon: 'trash',
     path: '/forget',
-    tooltip: 'Forget cached keys'
+    tooltip: 'Get Amnesia'
   }
 ];
 
 module.exports = function($scope, $element, $location, requests) {
+  var vertical = $location.path() === '/';
+  $scope.listStyle = 'list-' + (vertical ? 'unstyled' : 'inline');
+  $scope.width = vertical ? 'auto' : 100 / menu.length + '%';
   $scope.menu = menu;
-  $scope.vertical = $location.path() === '/';
 
   requests.listen(updateCounts.bind(null, true));
 
@@ -56,7 +58,7 @@ module.exports = function($scope, $element, $location, requests) {
   updateCounts();
 
   // TODO: get rid of this, and use ui-bootstrap + ui.bootstrap.tooltip
-  $scope.$watch(function() {
-    $element.find('[data-toggle="tooltip"]').tooltip();
-  })
+  // $scope.$watch(function() {
+  //   $element.find('[data-toggle="tooltip"]').tooltip();
+  // })
 }
